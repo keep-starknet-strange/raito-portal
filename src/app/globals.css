@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 13% 5%;  /* #0D0D0D */
+    --foreground: 0 0% 100%;   /* #FFFFFF */
+    --card: 220 13% 7%;        /* #131313 */
+    --card-foreground: 0 0% 100%;
+    --primary: 33 100% 54%;    /* #F7931A - Bitcoin orange */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 220 13% 11%;  /* #1C1C1C */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 13% 11%;
+    --muted-foreground: 220 9% 78%;  /* #C7C7C7 */
+    --accent: 220 13% 11%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 11%;
+    --input: 220 13% 11%;
+    --ring: 33 100% 54%;
+    --radius: 0.75rem;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground font-semibold tracking-tight;
+  }
+  
+  .hash-text {
+    @apply font-mono text-sm break-all;
+  }
+  
+  .block-stream-bg {
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 20px,
+      rgba(247, 147, 26, 0.1) 20px,
+      rgba(247, 147, 26, 0.1) 22px
+    );
+    animation: block-stream 45s linear infinite;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  
+  .verification-glow {
+    box-shadow: 0 0 20px rgba(0, 210, 106, 0.3);
+  }
+  
+  .bitcoin-glow {
+    box-shadow: 0 0 16px rgba(247, 147, 26, 0.6);
+  }
+}
