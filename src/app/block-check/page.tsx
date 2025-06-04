@@ -23,21 +23,21 @@ interface SampleBlock {
 const sampleBlocks: SampleBlock[] = [
   {
     id: 'valid-1',
-    hash: '00000000000000000002b5d213c78cc70c4b5a446c8d5e1f2c8d8f3a4b5c6d7',
+    hash: '00000000000000000002b5d213c78cc70c4b5a446c8d5e1f2c8d8f3a4b5c6d7e',
     description: 'Valid block #869999 (Recent)',
     type: 'valid',
     expectedResult: 'Found at height #869999'
   },
   {
     id: 'valid-2',
-    hash: '00000000000000000001a2b3c4d5e6f7890123456789012345678901234567',
+    hash: '00000000000000000001a2b3c4d5e6f7890123456789012345678901234567ab',
     description: 'Valid block #869998',
     type: 'valid',
     expectedResult: 'Found at height #869998'
   },
   {
     id: 'valid-3',
-    hash: '000000000000000000019a8b7c6d5e4f3210987654321098765432109876543',
+    hash: '000000000000000000019a8b7c6d5e4f3210987654321098765432109876543a',
     description: 'Valid block #869997',
     type: 'valid',
     expectedResult: 'Found at height #869997'

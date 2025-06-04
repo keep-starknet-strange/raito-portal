@@ -22,7 +22,7 @@ interface SampleTx {
 const sampleTransactions: SampleTx[] = [
   {
     id: 'valid-1',
-    hash: 'd4e5f678901234567890123456789012345678901234567890123456789abcdef',
+    hash: 'd4e5f67890123456789012345678901234567890123456789012345678abcdef',
     description: 'Valid transaction in Block #869999',
     type: 'valid',
     expectedResult: 'Found in Block #869999'
