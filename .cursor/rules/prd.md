@@ -1,8 +1,3 @@
-Perfect. I’ll write a detailed Product Requirements Document (PRD) and implementation plan for the Raito web portal MVP. This will include the core features for the block explorer, STARK proof visualization, and a strong emphasis on Bitcoin-themed branding, modern UI/UX, and smooth verification flow using mocked data. I’ll also outline the sections for developer tools and APIs as future roadmap items.
-
-I’ll get started and will update you shortly with the full document.
-
-
 # Raito Web Portal MVP – Product Requirements Document & Implementation Plan
 
 ## Overview & Vision
@@ -410,10 +405,3 @@ Following is a step-by-step plan to implement the Raito Web Portal MVP. The impl
 
 Throughout development, **visual and interaction design is the priority**. At each step, attention will be paid to the UI details (spacing, alignment, color usage, text clarity) and the feedback given to the user on each action. This ensures the final product isn’t just functionally complete but also delivers the *“wow”* factor expected from a cutting-edge Bitcoin portal.
 
-## Conclusion
-
-The Raito Web Portal MVP will serve as a compelling demonstration of how Bitcoin’s integrity can be verified in a user-friendly, trust-minimized way. By focusing on a polished UI/UX and the core features of block verification, transaction inclusion, and header checks (all backed by the concept of STARK proofs), this portal will effectively communicate Raito’s value proposition to the community.
-
-Moving forward, the MVP’s solid foundation – built with modern web tech and a strong design language – will allow the project to incorporate real proof data and expanded functionality (like live blockchain data, true proof verification, and developer APIs) with relative ease. Raito’s mantra is **“Don’t trust, verify,”** and this web portal brings that philosophy to life, inviting users to experience the future of Bitcoin light clients in a visually engaging way.
-
-**Sources:** The concept of using STARK proofs for Bitcoin validation is inspired by prior research and projects like StarkWare’s ZeroSync, which demonstrated that augmenting the Bitcoin header chain with a Merkle tree allows succinct proofs of inclusion for blocks and transactions. The Raito project itself aims to *“bring trustless validation of the Bitcoin blockchain through STARK proof verification”*, revolutionizing how quickly and securely new nodes can be bootstrapped. This PRD and implementation plan translate those ambitious ideas into a concrete, user-centric web application.
