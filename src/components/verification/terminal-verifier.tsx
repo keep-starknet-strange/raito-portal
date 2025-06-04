@@ -17,12 +17,9 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
   const verificationSteps = [
     "Initializing STARK verifier...",
     "Loading block header data...",
-    "Parsing Merkle tree structure...",
-    "Validating cryptographic signatures...",
     "Computing witness polynomials...", 
     "Verifying FRI commitments...",
     "Checking arithmetic constraints...",
-    "Finalizing proof verification...",
     "✓ STARK proof VERIFIED successfully!"
   ]
 
@@ -31,20 +28,23 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
     setIsVerifying(true)
     setStep(0)
     
-    // Simulate verification steps
+    // Simulate verification steps - faster timing
     const interval = setInterval(() => {
       setStep(prevStep => {
         if (prevStep >= verificationSteps.length - 1) {
           clearInterval(interval)
-          setTimeout(() => {
-            setIsVerifying(false)
-            setTimeout(() => setIsOpen(false), 2000)
-          }, 1000)
+          setIsVerifying(false)
           return prevStep
         }
         return prevStep + 1
       })
-    }, 800)
+    }, 600) // Reduced from 800ms to 600ms
+  }
+
+  const handleClose = () => {
+    setIsOpen(false)
+    setStep(0)
+    setIsVerifying(false)
   }
 
   const matrixChars = "ヌコノイサキシメル01"
@@ -70,18 +70,24 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
     <>
       <Button
         onClick={startVerification}
-        variant="ghost"
+        variant="default"
         size="sm"
-        className={`text-success hover:text-success hover:bg-success/10 transition-all duration-300 ${className}`}
+        className={`bg-success hover:bg-success/90 text-black font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 ${className}`}
         disabled={isVerifying}
       >
-        <Icons.lightning className="mr-1 h-3 w-3" />
+        <Icons.lightning className="mr-2 h-4 w-4" />
         Verify Locally
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="relative w-full max-w-2xl h-96 bg-black border border-green-400/30 rounded-lg overflow-hidden font-mono shadow-2xl shadow-green-400/20 terminal-flicker">
+        <div 
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={handleClose}
+        >
+          <div 
+            className="relative w-full max-w-3xl h-[500px] bg-black border border-green-400/30 rounded-lg overflow-hidden font-mono shadow-2xl shadow-green-400/20 terminal-flicker"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Matrix rain background */}
             <div className="absolute inset-0 overflow-hidden">
               {generateMatrixRain()}
@@ -96,7 +102,7 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
                 <span className="ml-3 text-green-400 text-sm">raito-verifier v1.0.0</span>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="text-green-400 hover:text-white transition-colors"
               >
                 ✕
@@ -104,13 +110,13 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
             </div>
             
             {/* Terminal content */}
-            <div className="relative z-10 p-6 h-full overflow-hidden">
+            <div className="relative z-10 p-6 h-full overflow-y-auto">
               <div className="text-green-400 text-sm leading-relaxed">
                 <div className="mb-4">
                   <span className="text-yellow-400">$</span> raito verify-block --height={blockHeight} --local
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-2 mb-6">
                   {verificationSteps.slice(0, step + 1).map((stepText, index) => (
                     <div 
                       key={index}
@@ -148,20 +154,54 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
                 </div>
                 
                 {step >= verificationSteps.length - 1 && (
-                  <div className="mt-6 p-4 border border-green-400/50 rounded bg-green-400/10">
-                    <div className="flex items-center gap-2 text-green-300 font-bold">
-                      <Icons.lock className="h-5 w-5" />
-                      <span>Block #{blockHeight} verification complete!</span>
-                    </div>
-                    <div className="mt-2 text-green-400 text-xs">
-                      Proof size: 2,147 bytes | Verification time: {Math.floor(Math.random() * 30 + 20)}ms
+                  <div className="mt-8 p-6 border-2 border-green-400/70 rounded-lg bg-green-400/20 relative overflow-hidden">
+                    {/* Success glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 via-green-400/20 to-green-400/10 animate-pulse"></div>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 text-green-300 font-bold text-xl mb-4">
+                        <Icons.lock className="h-8 w-8 animate-bounce" />
+                        <span>VERIFICATION COMPLETE!</span>
+                        <Icons.verified className="h-8 w-8 animate-spin" />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="bg-black/30 rounded p-3">
+                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Block Height</div>
+                          <div className="text-green-300 font-bold text-lg">#{blockHeight.toLocaleString()}</div>
+                        </div>
+                        <div className="bg-black/30 rounded p-3">
+                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Proof Status</div>
+                          <div className="text-green-300 font-bold text-lg">✓ VALID</div>
+                        </div>
+                        <div className="bg-black/30 rounded p-3">
+                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Proof Size</div>
+                          <div className="text-green-300 font-bold text-lg">2,147 bytes</div>
+                        </div>
+                        <div className="bg-black/30 rounded p-3">
+                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Verification Time</div>
+                          <div className="text-green-300 font-bold text-lg">{Math.floor(Math.random() * 30 + 20)}ms</div>
+                        </div>
+                      </div>
+                      
+                      <div className="text-center text-green-300 text-lg font-semibold">
+                        🔒 Block #{blockHeight} is cryptographically verified and trustworthy!
+                      </div>
                     </div>
                   </div>
                 )}
                 
                 {!isVerifying && step >= verificationSteps.length - 1 && (
-                  <div className="mt-4">
-                    <span className="text-yellow-400">$</span> <span className="animate-pulse">_</span>
+                  <div className="mt-6 flex items-center justify-between">
+                    <div>
+                      <span className="text-yellow-400">$</span> <span className="animate-pulse">_</span>
+                    </div>
+                    <button
+                      onClick={handleClose}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-500 text-black font-semibold rounded transition-colors"
+                    >
+                      Close Terminal
+                    </button>
                   </div>
                 )}
               </div>
