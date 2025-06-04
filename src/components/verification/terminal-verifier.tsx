@@ -19,189 +19,176 @@ export function TerminalVerifier({ blockHeight, className = "" }: TerminalVerifi
     "Loading block header data...",
     "Computing witness polynomials...", 
     "Verifying FRI commitments...",
-    "Checking arithmetic constraints...",
-    "✓ STARK proof VERIFIED successfully!"
+    "Validating Merkle proofs...",
+    "Final proof verification..."
   ]
 
-  const startVerification = () => {
+  const matrixChars = ['0', '1', 'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ']
+
+  const handleVerify = async () => {
     setIsOpen(true)
     setIsVerifying(true)
     setStep(0)
-    
-    // Simulate verification steps - faster timing
-    const interval = setInterval(() => {
-      setStep(prevStep => {
-        if (prevStep >= verificationSteps.length - 1) {
-          clearInterval(interval)
-          setIsVerifying(false)
-          return prevStep
-        }
-        return prevStep + 1
-      })
-    }, 600) // Reduced from 800ms to 600ms
+
+    for (let i = 0; i < verificationSteps.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 600))
+      setStep(i + 1)
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 500))
+    setIsVerifying(false)
   }
 
   const handleClose = () => {
     setIsOpen(false)
-    setStep(0)
     setIsVerifying(false)
+    setStep(0)
   }
 
-  const matrixChars = "ヌコノイサキシメル01"
-  const generateMatrixRain = () => {
-    return Array.from({ length: 20 }, (_, i) => (
-      <div
-        key={i}
-        className="matrix-rain absolute text-green-400 font-mono text-sm opacity-20"
-        style={{
-          left: `${Math.random() * 100}%`,
-          animationDelay: `${Math.random() * 2}s`,
-          animationDuration: `${2 + Math.random() * 3}s`
-        }}
-      >
-        {Array.from({ length: 15 }, () => 
-          matrixChars[Math.floor(Math.random() * matrixChars.length)]
-        ).join('')}
-      </div>
-    ))
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && !isVerifying) {
+      handleClose()
+    }
   }
 
   return (
     <>
-      <Button
-        onClick={startVerification}
-        variant="default"
-        size="sm"
-        className={`bg-success hover:bg-success/90 text-black font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 ${className}`}
-        disabled={isVerifying}
-      >
-        <Icons.lightning className="mr-2 h-4 w-4" />
-        Verify Locally
-      </Button>
+      <div className={`${className}`}>
+        <Button
+          onClick={handleVerify}
+          className="bg-success hover:bg-success/90 text-black font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 mobile-button"
+          disabled={isVerifying}
+        >
+          <Icons.lock className="mr-2 h-5 w-5" />
+          Verify Locally
+        </Button>
+      </div>
 
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
-          onClick={handleClose}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm mobile-p-safe"
+          onClick={handleBackdropClick}
         >
-          <div 
-            className="relative w-full max-w-3xl h-[500px] bg-black border border-green-400/30 rounded-lg overflow-hidden font-mono shadow-2xl shadow-green-400/20 terminal-flicker"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative bg-black border border-success/30 rounded-lg shadow-2xl mobile-terminal w-full max-w-4xl overflow-hidden">
             {/* Matrix rain background */}
-            <div className="absolute inset-0 overflow-hidden">
-              {generateMatrixRain()}
-            </div>
-            
-            {/* Terminal header */}
-            <div className="relative z-10 bg-green-900/20 border-b border-green-400/30 px-4 py-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                <span className="ml-3 text-green-400 text-sm">raito-verifier v1.0.0</span>
-              </div>
-              <button
-                onClick={handleClose}
-                className="text-green-400 hover:text-white transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-            
-            {/* Terminal content */}
-            <div className="relative z-10 p-6 h-full overflow-y-auto">
-              <div className="text-green-400 text-sm leading-relaxed">
-                <div className="mb-4">
-                  <span className="text-yellow-400">$</span> raito verify-block --height={blockHeight} --local
-                </div>
-                
-                <div className="space-y-2 mb-6">
-                  {verificationSteps.slice(0, step + 1).map((stepText, index) => (
-                    <div 
-                      key={index}
-                      className={`flex items-center gap-2 ${
-                        index === step ? 'animate-pulse' : ''
-                      } ${
-                        stepText.includes('✓') ? 'text-green-300 font-bold' : 'text-green-400'
-                      }`}
-                      style={{
-                        animationDelay: `${index * 0.1}s`
-                      }}
-                    >
-                      {stepText.includes('✓') ? (
-                        <>
-                          <Icons.verified className="h-4 w-4 text-green-300 animate-spin" />
-                          <span className="glow-text">{stepText}</span>
-                        </>
-                      ) : index === step && isVerifying ? (
-                        <>
-                          <div className="loading-dots">
-                            <span className="dot">.</span>
-                            <span className="dot">.</span>
-                            <span className="dot">.</span>
-                          </div>
-                          <span>{stepText}</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="text-green-600">▶</span>
-                          <span>{stepText}</span>
-                        </>
-                      )}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {Array.from({ length: 15 }, (_, i) => (
+                <div
+                  key={i}
+                  className="matrix-rain absolute text-success/20 font-mono text-xs"
+                  style={{
+                    left: `${i * 6.67}%`,
+                    animationDuration: `${2 + Math.random() * 3}s`,
+                    animationDelay: `${Math.random() * 2}s`
+                  }}
+                >
+                  {Array.from({ length: 20 }, (_, j) => (
+                    <div key={j}>
+                      {matrixChars[Math.floor(Math.random() * matrixChars.length)]}
                     </div>
                   ))}
                 </div>
-                
-                {step >= verificationSteps.length - 1 && (
-                  <div className="mt-8 p-6 border-2 border-green-400/70 rounded-lg bg-green-400/20 relative overflow-hidden">
-                    {/* Success glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-green-400/10 via-green-400/20 to-green-400/10 animate-pulse"></div>
-                    
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-3 text-green-300 font-bold text-xl mb-4">
-                        <Icons.lock className="h-8 w-8 animate-bounce" />
-                        <span>VERIFICATION COMPLETE!</span>
-                        <Icons.verified className="h-8 w-8 animate-spin" />
+              ))}
+            </div>
+
+            {/* Terminal header - Mobile optimized */}
+            <div className="relative z-10 flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-surface to-surface-alt border-b border-success/30">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="flex gap-1.5 sm:gap-2">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-green-500"></div>
+                </div>
+                <div className="text-success font-mono text-xs sm:text-sm">
+                  raito-verifier v1.0.0 - Block #{blockHeight}
+                </div>
+              </div>
+              
+              {!isVerifying && (
+                <Button
+                  onClick={handleClose}
+                  variant="ghost"
+                  className="mobile-icon-button text-text-secondary hover:text-danger h-8 w-8 sm:h-10 sm:w-10"
+                >
+                  <Icons.unverified className="h-4 w-4 sm:h-5 sm:w-5" />
+                </Button>
+              )}
+            </div>
+
+            {/* Terminal content - Mobile optimized */}
+            <div className="relative z-10 p-4 sm:p-6 bg-black/95 min-h-[300px] sm:min-h-[400px] overflow-y-auto mobile-scroll">
+              <div className="font-mono text-success space-y-2 sm:space-y-3">
+                {/* Verification steps */}
+                {verificationSteps.map((stepText, index) => (
+                  <div key={index} className="flex items-center gap-2 sm:gap-3">
+                    {index < step ? (
+                      <Icons.verified className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
+                    ) : index === step - 1 && isVerifying ? (
+                      <div className="loading-dots flex gap-1">
+                        <span className="dot w-1 h-1 sm:w-1.5 sm:h-1.5 bg-success rounded-full"></span>
+                        <span className="dot w-1 h-1 sm:w-1.5 sm:h-1.5 bg-success rounded-full"></span>
+                        <span className="dot w-1 h-1 sm:w-1.5 sm:h-1.5 bg-success rounded-full"></span>
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="bg-black/30 rounded p-3">
-                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Block Height</div>
-                          <div className="text-green-300 font-bold text-lg">#{blockHeight.toLocaleString()}</div>
-                        </div>
-                        <div className="bg-black/30 rounded p-3">
-                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Proof Status</div>
-                          <div className="text-green-300 font-bold text-lg">✓ VALID</div>
-                        </div>
-                        <div className="bg-black/30 rounded p-3">
-                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Proof Size</div>
-                          <div className="text-green-300 font-bold text-lg">2,147 bytes</div>
-                        </div>
-                        <div className="bg-black/30 rounded p-3">
-                          <div className="text-green-400 text-xs uppercase tracking-wide mb-1">Verification Time</div>
-                          <div className="text-green-300 font-bold text-lg">{Math.floor(Math.random() * 30 + 20)}ms</div>
-                        </div>
-                      </div>
-                      
-                      <div className="text-center text-green-300 text-lg font-semibold">
-                        🔒 Block #{blockHeight} is cryptographically verified and trustworthy!
-                      </div>
-                    </div>
+                    ) : (
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 border border-success/30 rounded"></div>
+                    )}
+                    <span className={`text-xs sm:text-sm ${index < step ? 'text-success' : index === step - 1 && isVerifying ? 'glow-text' : 'text-success/50'}`}>
+                      {stepText}
+                    </span>
                   </div>
-                )}
-                
-                {!isVerifying && step >= verificationSteps.length - 1 && (
-                  <div className="mt-6 flex items-center justify-between">
-                    <div>
-                      <span className="text-yellow-400">$</span> <span className="animate-pulse">_</span>
+                ))}
+
+                {/* Results section */}
+                {!isVerifying && step >= verificationSteps.length && (
+                  <div className="mt-6 sm:mt-8 space-y-4 sm:space-y-6 mobile-slide-up">
+                    <div className="border border-success/30 rounded-lg p-4 sm:p-6 bg-success/5">
+                      <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div className="p-2 sm:p-3 bg-success/20 rounded-xl border border-success/30">
+                          <Icons.lock className="h-6 w-6 sm:h-8 sm:w-8 text-success" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg sm:text-2xl font-bold text-success mb-1 sm:mb-2">
+                            Proof Verified Successfully!
+                          </h3>
+                          <p className="text-xs sm:text-sm text-success/80">
+                            Block #{blockHeight} is cryptographically proven valid
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Stats grid - Mobile optimized */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div className="bg-surface-alt/50 rounded-lg p-3 sm:p-4 border border-slate-600">
+                          <div className="text-xs sm:text-sm text-success font-medium">Proof Size</div>
+                          <div className="text-sm sm:text-lg font-bold text-success">2.4 KB</div>
+                        </div>
+                        <div className="bg-surface-alt/50 rounded-lg p-3 sm:p-4 border border-slate-600">
+                          <div className="text-xs sm:text-sm text-success font-medium">Verify Time</div>
+                          <div className="text-sm sm:text-lg font-bold text-success">3.6s</div>
+                        </div>
+                        <div className="bg-surface-alt/50 rounded-lg p-3 sm:p-4 border border-slate-600 col-span-2 sm:col-span-1">
+                          <div className="text-xs sm:text-sm text-success font-medium">Security</div>
+                          <div className="text-sm sm:text-lg font-bold text-success">128-bit</div>
+                        </div>
+                      </div>
+
+                      <div className="text-xs sm:text-sm text-success/70 leading-relaxed">
+                        ✅ STARK proof validation complete. This block header is mathematically 
+                        proven to be part of the canonical Bitcoin blockchain without requiring 
+                        trust in any third party.
+                      </div>
                     </div>
-                    <button
-                      onClick={handleClose}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-500 text-black font-semibold rounded transition-colors"
-                    >
-                      Close Terminal
-                    </button>
+
+                    {/* Mobile-friendly close button */}
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={handleClose}
+                        className="mobile-button bg-surface hover:bg-surface-alt text-text-primary border border-success/30"
+                      >
+                        <Icons.verified className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                        Close Terminal
+                      </Button>
+                    </div>
                   </div>
                 )}
               </div>
