@@ -129,7 +129,7 @@ export default function TxCheckPage() {
             </div>
             <p className="mobile-text-lg text-text-secondary max-w-3xl mx-auto leading-relaxed px-4">
               Verify Bitcoin transaction inclusion using STARK proofs. 
-              <span className="text-bitcoin font-semibold"> Don't trust, verify.</span>
+              <span className="text-bitcoin font-semibold"> Don&apos;t trust, verify.</span>
             </p>
           </div>
 
