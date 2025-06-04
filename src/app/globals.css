@@ -480,7 +480,7 @@
     ring-offset-color: hsl(var(--background));
   }
 
-  /* Mobile optimizations */
+  /* Enhanced Mobile optimizations */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
@@ -489,18 +489,56 @@
   .mobile-text-base { @apply text-base; }
   .mobile-text-lg { @apply text-lg; }
 
+  /* Enhanced safe area support */
   .mobile-p-safe {
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-top: env(safe-area-inset-top);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+    padding-bottom: max(env(safe-area-inset-bottom), 16px);
+    padding-top: max(env(safe-area-inset-top), 16px);
+    padding-left: max(env(safe-area-inset-left), 16px);
+    padding-right: max(env(safe-area-inset-right), 16px);
   }
 
+  .mobile-pt-safe {
+    padding-top: max(env(safe-area-inset-top), 16px);
+  }
+
+  .mobile-pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 16px);
+  }
+
+  /* Notch-aware layouts */
+  .notch-aware {
+    margin-top: env(safe-area-inset-top);
+    margin-bottom: env(safe-area-inset-bottom);
+    margin-left: env(safe-area-inset-left);
+    margin-right: env(safe-area-inset-right);
+  }
+
+  /* Mobile keyboard handling */
+  .keyboard-open {
+    height: calc(100vh - var(--keyboard-height, 0px));
+    overflow: hidden;
+  }
+
+  .keyboard-open .keyboard-aware {
+    padding-bottom: var(--keyboard-height, 0px);
+    transition: padding-bottom 0.3s ease-out;
+  }
+
+  /* Enhanced mobile inputs */
   .mobile-input {
     @apply text-base;
-    font-size: 16px !important;
+    font-size: 16px !important; /* Prevent iOS zoom */
     -webkit-appearance: none;
     border-radius: 8px;
+    background-color: hsl(var(--surface));
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+
+  .mobile-input:focus {
+    outline: none;
+    border-color: hsl(var(--bitcoin));
+    box-shadow: 0 0 0 3px hsl(var(--bitcoin) / 0.1);
   }
 
   .mobile-hash-input {
@@ -509,13 +547,22 @@
     line-height: 1.4;
     padding: 16px 12px;
     min-height: 56px;
+    resize: none;
   }
 
+  /* Enhanced mobile buttons */
   .mobile-button {
     @apply touch-target;
     min-height: 48px;
     font-size: 16px;
     padding: 12px 20px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-button:active {
+    transform: scale(0.98);
   }
 
   .mobile-icon-button {
@@ -523,8 +570,19 @@
     min-height: 44px;
     min-width: 44px;
     padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  .mobile-icon-button:active {
+    transform: scale(0.95);
+    background-color: hsl(var(--surface-alt));
+  }
+
+  /* Mobile grid layouts */
   .mobile-grid {
     display: grid;
     gap: 12px;
@@ -537,21 +595,29 @@
     grid-template-columns: 1fr 1fr;
   }
 
+  /* Enhanced mobile typography */
   .mobile-h1 {
     @apply text-3xl sm:text-4xl lg:text-5xl;
     line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.025em;
   }
 
   .mobile-h2 {
     @apply text-2xl sm:text-3xl lg:text-4xl;
     line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   .mobile-h3 {
     @apply text-xl sm:text-2xl;
     line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
+  /* Enhanced mobile spacing */
   .mobile-spacing {
     @apply py-6 sm:py-8 lg:py-12;
   }
@@ -560,11 +626,14 @@
     @apply py-8 sm:py-12 lg:py-16;
   }
 
+  /* Enhanced mobile scrolling */
   .mobile-scroll {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    scroll-behavior: smooth;
   }
 
+  /* Mobile-specific animations */
   .mobile-slide-up {
     animation: mobileSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -580,6 +649,22 @@
     }
   }
 
+  .mobile-fade-in {
+    animation: mobileFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes mobileFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Enhanced mobile hover states */
   @media (hover: hover) {
     .mobile-hover:hover {
       transform: scale(1.02);
@@ -594,9 +679,118 @@
     }
   }
 
+  /* Mobile-specific visibility classes */
   .mobile-only { @apply block sm:hidden; }
-  .desktop-only { @apply hidden sm:block; }
-  .tablet-up { @apply hidden md:block; }
+  .tablet-only { @apply hidden sm:block md:hidden; }
+  .desktop-only { @apply hidden md:block; }
+  .tablet-up { @apply hidden sm:block; }
+
+  /* Mobile terminal optimization */
+  .mobile-terminal {
+    width: calc(100vw - 32px);
+    max-height: calc(100vh - 120px);
+    margin: 16px;
+  }
+
+  /* Enhanced mobile loading states */
+  .mobile-loading-container {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: hsl(var(--background));
+  }
+
+  /* Mobile navigation enhancements */
+  .mobile-nav-overlay {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Mobile form enhancements */
+  .mobile-form-group {
+    margin-bottom: 24px;
+  }
+
+  .mobile-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .mobile-form-feedback {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .mobile-form-feedback.success {
+    color: hsl(var(--success));
+  }
+
+  .mobile-form-feedback.error {
+    color: hsl(var(--danger));
+  }
+
+  /* Mobile card enhancements */
+  .mobile-card {
+    border-radius: 16px;
+    padding: 20px;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 4px 8px hsl(var(--background) / 0.1);
+  }
+
+  .mobile-card.interactive {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-card.interactive:active {
+    transform: scale(0.99);
+    box-shadow: 0 2px 4px hsl(var(--background) / 0.1);
+  }
+
+  /* Mobile haptic feedback simulation */
+  .haptic-light:active { animation: hapticLight 0.1s ease-out; }
+  .haptic-medium:active { animation: hapticMedium 0.15s ease-out; }
+  .haptic-heavy:active { animation: hapticHeavy 0.2s ease-out; }
+
+  @keyframes hapticLight {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.99); }
+  }
+
+  @keyframes hapticMedium {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.97); }
+  }
+
+  @keyframes hapticHeavy {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+  }
+
+  /* Mobile performance optimizations */
+  .mobile-optimized {
+    will-change: transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* iOS-specific optimizations */
+  .ios-smooth {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Android-specific optimizations */
+  .android-smooth {
+    touch-action: manipulation;
+  }
 }
 
 /* TERMINAL VERIFIER PREMIUM ANIMATIONS */
