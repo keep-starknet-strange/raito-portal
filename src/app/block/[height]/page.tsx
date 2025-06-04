@@ -8,13 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import VerificationSimulator from "@/components/verification/verification-simulator"
 
 interface BlockPageProps {
-  params: {
+  params: Promise<{
     height: string
-  }
+  }>
 }
 
-export default function BlockPage({ params }: BlockPageProps) {
-  const blockHeight = parseInt(params.height)
+export default async function BlockPage({ params }: BlockPageProps) {
+  const { height } = await params
+  const blockHeight = parseInt(height)
   const block = mockBlocks.find(b => b.height === blockHeight)
   
   if (!block) {
