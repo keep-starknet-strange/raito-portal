@@ -12,7 +12,11 @@ import {
     Github,
     Twitter,
     Copy,
-    Loader2
+    Loader2,
+    Box,
+    Activity,
+    TrendingUp,
+    Shield
 } from "lucide-react"
 
 export const Icons = {
@@ -30,6 +34,10 @@ export const Icons = {
   twitter: Twitter,
   copy: Copy,
   spinner: Loader2,
+  cube: Box,
+  activity: Activity,
+  trendingUp: TrendingUp,
+  shield: Shield,
 } as const
 
 export type IconKeys = keyof typeof Icons 
