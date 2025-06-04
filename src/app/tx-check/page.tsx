@@ -29,17 +29,17 @@ const sampleTransactions: SampleTx[] = [
   },
   {
     id: 'valid-2', 
-    hash: 'e5f67890123456789012345678901234567890123456789012345678901abcdef',
-    description: 'Valid transaction in Block #869999',
+    hash: '7890123456789012345678901234567890123456789012345678901234abcdef',
+    description: 'Valid transaction in Block #869998',
     type: 'valid',
-    expectedResult: 'Found in Block #869999'
+    expectedResult: 'Found in Block #869998'
   },
   {
     id: 'valid-3',
-    hash: 'f6789012345678901234567890123456789012345678901234567890123456ab',
-    description: 'Valid transaction in Block #869998',
+    hash: '0123456789012345678901234567890123456789012345678901234567abcdef',
+    description: 'Valid transaction in Block #869997',
     type: 'valid', 
-    expectedResult: 'Found in Block #869998'
+    expectedResult: 'Found in Block #869997'
   },
   {
     id: 'invalid-1',
