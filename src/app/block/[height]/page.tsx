@@ -227,7 +227,7 @@ export default async function BlockPage({ params }: BlockPageProps) {
                           </span>
                           <HashFlicker 
                             hash={txid}
-                            truncate={{ start: 8, end: 8 }}
+                            truncate={true}
                             className="text-text-primary group-hover:text-bitcoin transition-colors"
                           />
                         </div>
