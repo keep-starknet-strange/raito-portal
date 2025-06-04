@@ -30,24 +30,29 @@ export function ThemeProvider({
   storageKey = 'raito-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      return (localStorage.getItem(storageKey) as Theme) || defaultTheme
-    }
-    return defaultTheme
-  })
+  // Always start with defaultTheme to prevent hydration mismatch
+  const [theme, setTheme] = useState<Theme>(defaultTheme)
+  const [mounted, setMounted] = useState(false)
 
+  // After hydration, check localStorage and update theme if needed
   useEffect(() => {
+    setMounted(true)
+    
+    const storedTheme = localStorage.getItem(storageKey) as Theme
+    if (storedTheme && (storedTheme === 'dark' || storedTheme === 'light')) {
+      setTheme(storedTheme)
+    }
+  }, [storageKey])
+
+  // Apply theme to DOM
+  useEffect(() => {
+    if (!mounted) return // Don't apply until after hydration
+    
     const root = window.document.documentElement
     
     root.classList.remove('light', 'dark')
-    
-    if (theme === 'light') {
-      root.classList.add('light')
-    } else {
-      root.classList.add('dark')
-    }
-  }, [theme])
+    root.classList.add(theme)
+  }, [theme, mounted])
 
   const value = {
     theme,
@@ -60,6 +65,15 @@ export function ThemeProvider({
       localStorage.setItem(storageKey, newTheme)
       setTheme(newTheme)
     },
+  }
+
+  // Prevent hydration mismatch by not rendering theme-dependent content until mounted
+  if (!mounted) {
+    return (
+      <ThemeProviderContext.Provider {...props} value={{ ...value, theme: defaultTheme }}>
+        {children}
+      </ThemeProviderContext.Provider>
+    )
   }
 
   return (

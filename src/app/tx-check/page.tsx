@@ -217,6 +217,7 @@ export default function TxCheckPage() {
                           <HashFlicker 
                             hash={result.txid || ''} 
                             className="text-text-primary break-all leading-relaxed text-sm sm:text-base"
+                            copyable={true}
                           />
                         </div>
                         
@@ -275,6 +276,7 @@ export default function TxCheckPage() {
                           <HashFlicker 
                             hash={result.txid || ''} 
                             className="text-text-primary break-all leading-relaxed text-sm sm:text-base"
+                            copyable={true}
                           />
                         </div>
                         

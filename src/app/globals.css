@@ -7,6 +7,7 @@
 
 @layer base {
   :root {
+    /* Dark mode (default) */
     --background: 220 13% 5%;  /* #0D0D0D */
     --foreground: 0 0% 100%;   /* #FFFFFF */
     --card: 220 13% 7%;        /* #131313 */
@@ -26,131 +27,218 @@
     --ring: 33 100% 54%;       /* #F7931A */
     --radius: 0.75rem;
     
-    /* Light mode variants */
-    --light-background: 0 0% 98%;
-    --light-foreground: 220 13% 5%;
-    --light-card: 0 0% 100%;
-    --light-surface: 220 13% 95%;
-    --light-surface-alt: 220 13% 92%;
-    --light-border: 220 13% 85%;
+    /* Custom Bitcoin-themed variables */
+    --surface: 220 13% 7%;       /* #131313 */
+    --surface-alt: 220 13% 11%;  /* #1C1C1C */
+    --text-primary: 0 0% 100%;   /* #FFFFFF */
+    --text-secondary: 220 9% 78%; /* #C7C7C7 */
+    --bitcoin: 33 100% 54%;      /* #F7931A */
+    --bitcoin-dark: 33 85% 45%;  /* #d67d15 */
+    --success: 142 76% 36%;      /* #00D26A */
+    --danger: 0 84% 60%;         /* #FF5470 */
+    
+    /* Premium glow colors */
+    --glow-bitcoin: 33 100% 54%;
+    --glow-success: 142 76% 36%;
+    --glow-verification: 142 76% 36%;
   }
 
-  /* Light theme class */
+  /* Light theme overrides */
   .light {
-    --background: var(--light-background);
-    --foreground: var(--light-foreground);
-    --card: var(--light-card);
-    --surface: var(--light-surface);
-    --surface-alt: var(--light-surface-alt);
-    --border: var(--light-border);
+    --background: 0 0% 98%;      /* #FAFAFA */
+    --foreground: 220 13% 5%;    /* #0D0D0D */
+    --card: 0 0% 100%;           /* #FFFFFF */
+    --card-foreground: 220 13% 5%;
+    --secondary: 220 13% 95%;    /* #F1F1F1 */
+    --secondary-foreground: 220 13% 5%;
+    --muted: 220 13% 95%;
+    --muted-foreground: 220 9% 40%;
+    --accent: 220 13% 95%;
+    --accent-foreground: 220 13% 5%;
+    --border: 220 13% 85%;       /* #D4D4D8 */
+    --input: 220 13% 90%;
+    
+    /* Custom variables for light mode */
+    --surface: 0 0% 100%;        /* #FFFFFF */
+    --surface-alt: 220 13% 95%;  /* #F1F1F1 */
+    --text-primary: 220 13% 5%;  /* #0D0D0D */
+    --text-secondary: 220 9% 40%; /* #666 */
+    
+    /* Maintain Bitcoin orange in light mode */
+    --bitcoin: 33 100% 54%;      /* #F7931A */
+    --bitcoin-dark: 33 85% 40%;  /* Darker for light mode */
+    --success: 142 76% 36%;      /* #00D26A */
+    --danger: 0 84% 60%;         /* #FF5470 */
   }
 
   * {
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  html {
+    @apply scroll-smooth;
+    scroll-behavior: smooth;
   }
 
-  /* Custom scrollbar */
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-x: hidden;
+  }
+
+  /* Enhanced scrollbar */
   ::-webkit-scrollbar {
     height: 8px;
     width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-surface;
+    background: hsl(var(--surface));
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-bitcoin/50 rounded-full;
+    background: linear-gradient(45deg, 
+      hsl(var(--bitcoin) / 0.6), 
+      hsl(var(--bitcoin) / 0.8)
+    );
+    border-radius: 4px;
+    transition: background 0.3s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-bitcoin/70;
+    background: linear-gradient(45deg, 
+      hsl(var(--bitcoin) / 0.8), 
+      hsl(var(--bitcoin))
+    );
   }
 
-  html {
-    @apply scroll-smooth;
-  }
-  
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-  }
-  
+  /* Enhanced typography */
   h1, h2, h3, h4, h5, h6 {
     @apply text-foreground font-semibold tracking-tight;
+    text-rendering: optimizeLegibility;
   }
-  
-  .hash-text {
-    @apply font-mono text-sm break-all;
+
+  /* Selection styling */
+  ::selection {
+    background: hsl(var(--bitcoin) / 0.2);
+    color: hsl(var(--foreground));
   }
-  
-  .block-stream-bg {
-    background-image: repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 20px,
-      rgba(247, 147, 26, 0.1) 20px,
-      rgba(247, 147, 26, 0.1) 22px
-    );
-    animation: block-stream 45s linear infinite;
-    opacity: 0.06;
-    pointer-events: none;
-  }
-  
-  .verification-glow {
-    box-shadow: 0 0 20px rgba(0, 210, 106, 0.3);
-  }
-  
-  .bitcoin-glow {
-    box-shadow: 0 0 16px rgba(247, 147, 26, 0.6);
+
+  ::-moz-selection {
+    background: hsl(var(--bitcoin) / 0.2);
+    color: hsl(var(--foreground));
   }
 }
 
 @layer components {
-  /* Block streaming animation */
-  .block-stream-container {
-    overflow: hidden;
+  /* PREMIUM ANIMATIONS & EFFECTS */
+
+  /* Enhanced hash flicker with scramble effect */
+  .hash-flicker {
     position: relative;
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    overflow: hidden;
   }
 
-  .block-stream-bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      rgba(247, 147, 26, 0.03) 25%, 
-      rgba(247, 147, 26, 0.06) 50%, 
-      rgba(247, 147, 26, 0.03) 75%, 
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: streamFlow 8s ease-in-out infinite;
+  .hash-flicker:hover .hash-chars {
+    animation: hashScramble 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  @keyframes streamFlow {
+  @keyframes hashScramble {
+    0% { 
+      transform: translateX(0);
+      filter: blur(0px);
+    }
+    10% {
+      transform: translateX(-2px);
+      filter: blur(1px);
+    }
+    20% {
+      transform: translateX(2px);
+      filter: blur(0px);
+    }
+    30% {
+      transform: translateX(-1px);
+      filter: blur(0.5px);
+    }
+    40% {
+      transform: translateX(1px);
+      filter: blur(0px);
+    }
+    50% {
+      transform: translateX(0);
+      filter: blur(1px);
+    }
+    70% {
+      filter: blur(0px);
+    }
+    100% {
+      transform: translateX(0);
+      filter: blur(0px);
+    }
+  }
+
+  /* Premium floating animation */
+  .float-premium {
+    animation: floatPremium 4s ease-in-out infinite;
+  }
+
+  @keyframes floatPremium {
     0%, 100% { 
-      background-position: -200% 0; 
-      opacity: 0.3;
+      transform: translateY(0px) scale(1);
+      filter: drop-shadow(0 4px 8px hsl(var(--bitcoin) / 0.1));
+    }
+    25% { 
+      transform: translateY(-3px) scale(1.01);
+      filter: drop-shadow(0 8px 16px hsl(var(--bitcoin) / 0.2));
     }
     50% { 
-      background-position: 200% 0; 
-      opacity: 0.8;
+      transform: translateY(-6px) scale(1.02);
+      filter: drop-shadow(0 12px 24px hsl(var(--bitcoin) / 0.3));
+    }
+    75% { 
+      transform: translateY(-3px) scale(1.01);
+      filter: drop-shadow(0 8px 16px hsl(var(--bitcoin) / 0.2));
     }
   }
 
-  /* Enhanced block cube animations */
-  .block-cube {
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* STARK verification pulse */
+  .stark-pulse {
+    animation: starkPulse 2s ease-in-out infinite;
   }
 
-  .block-cube::before {
+  @keyframes starkPulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px hsl(var(--success) / 0.3),
+        0 0 40px hsl(var(--success) / 0.1),
+        inset 0 0 20px hsl(var(--success) / 0.05);
+    }
+    50% {
+      box-shadow: 
+        0 0 30px hsl(var(--success) / 0.5),
+        0 0 60px hsl(var(--success) / 0.2),
+        0 0 80px hsl(var(--success) / 0.1),
+        inset 0 0 30px hsl(var(--success) / 0.1);
+    }
+  }
+
+  /* Bitcoin-themed block animation */
+  .block-cube-premium {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, 
+      hsl(var(--surface)), 
+      hsl(var(--surface-alt))
+    );
+  }
+
+  .block-cube-premium::before {
     content: '';
     position: absolute;
     top: 0;
@@ -160,129 +248,178 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(247, 147, 26, 0.2),
+      hsl(var(--bitcoin) / 0.3),
+      hsl(var(--bitcoin) / 0.1),
       transparent
     );
-    transition: left 0.6s ease;
+    transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .block-cube:hover::before {
+  .block-cube-premium:hover::before {
     left: 100%;
   }
 
-  .block-cube:hover {
-    transform: scale(1.05) translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
-                0 0 30px rgba(247, 147, 26, 0.2);
+  .block-cube-premium:hover {
+    transform: scale(1.03) translateY(-8px) rotateX(5deg);
+    box-shadow: 
+      0 25px 50px hsl(var(--background) / 0.3),
+      0 0 40px hsl(var(--bitcoin) / 0.2),
+      inset 0 1px 0 hsl(var(--bitcoin) / 0.1);
   }
 
-  /* Hash flicker effect */
-  .hash-flicker {
+  /* Premium button effects */
+  .btn-premium {
     position: relative;
-    display: inline-block;
-    transition: all 0.3s ease;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, 
+      hsl(var(--bitcoin)), 
+      hsl(var(--bitcoin-dark))
+    );
   }
 
-  .hash-flicker:hover .hash-chars {
-    animation: hashFlicker 0.8s ease-in-out;
+  .btn-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s ease;
   }
 
-  @keyframes hashFlicker {
-    0%, 100% { opacity: 1; }
-    10% { opacity: 0.8; }
-    20% { opacity: 0.9; }
-    30% { opacity: 0.7; }
-    40% { opacity: 1; }
-    50% { opacity: 0.6; }
-    60% { opacity: 0.9; }
-    70% { opacity: 0.8; }
-    80% { opacity: 1; }
-    90% { opacity: 0.7; }
+  .btn-premium:hover::before {
+    left: 100%;
   }
 
-  /* Matrix-style character cycling */
-  .hash-chars span {
-    display: inline-block;
-    transition: all 0.1s ease;
+  .btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 10px 25px hsl(var(--bitcoin) / 0.3),
+      0 0 20px hsl(var(--bitcoin) / 0.2);
   }
 
-  .hash-flicker:hover .hash-chars span:nth-child(odd) {
-    animation: charCycle 0.6s ease-in-out;
-    animation-delay: calc(var(--char-index) * 0.05s);
+  .btn-premium:active {
+    transform: translateY(0);
+    transition: transform 0.1s ease;
   }
 
-  @keyframes charCycle {
-    0%, 100% { transform: translateY(0); opacity: 1; }
-    25% { transform: translateY(-2px); opacity: 0.7; }
-    50% { transform: translateY(2px); opacity: 0.5; }
-    75% { transform: translateY(-1px); opacity: 0.8; }
-  }
-
-  /* Loading skeleton animations */
-  .skeleton {
+  /* Enhanced loading skeleton */
+  .skeleton-premium {
     background: linear-gradient(
       90deg,
       hsl(var(--surface)) 25%,
       hsl(var(--surface-alt)) 50%,
+      hsl(var(--bitcoin) / 0.1) 60%,
+      hsl(var(--surface-alt)) 70%,
       hsl(var(--surface)) 75%
     );
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s ease-in-out infinite;
+    background-size: 400% 100%;
+    animation: skeletonPremium 2s ease-in-out infinite;
   }
 
-  @keyframes skeleton-loading {
+  @keyframes skeletonPremium {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
 
-  /* Smooth page transitions */
-  .page-transition {
-    animation: pageSlideIn 0.4s ease-out;
+  /* Premium page transitions */
+  .page-transition-premium {
+    animation: pageTransitionPremium 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  @keyframes pageSlideIn {
+  @keyframes pageTransitionPremium {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(30px) scale(0.98);
+      filter: blur(4px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
     }
   }
 
-  /* Enhanced glow effects */
-  .glow-pulse {
-    animation: glowPulse 2s ease-in-out infinite;
+  /* Bitcoin block stream animation */
+  .block-stream-premium {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(var(--bitcoin) / 0.05) 25%, 
+      hsl(var(--bitcoin) / 0.1) 50%, 
+      hsl(var(--bitcoin) / 0.05) 75%, 
+      transparent 100%
+    );
+    background-size: 300% 100%;
+    animation: streamFlowPremium 12s ease-in-out infinite;
   }
 
-  @keyframes glowPulse {
-    0%, 100% {
-      box-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
+  @keyframes streamFlowPremium {
+    0%, 100% { 
+      background-position: -300% 0; 
+      opacity: 0.4;
     }
-    50% {
-      box-shadow: 0 0 20px rgba(247, 147, 26, 0.6),
-                  0 0 30px rgba(247, 147, 26, 0.3);
+    50% { 
+      background-position: 300% 0; 
+      opacity: 1;
     }
   }
 
-  /* Floating animation for recent blocks */
-  .float-animation {
-    animation: float 3s ease-in-out infinite;
+  /* Enhanced verification glow */
+  .verification-glow-premium {
+    position: relative;
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
+  .verification-glow-premium::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, 
+      hsl(var(--success)), 
+      hsl(var(--bitcoin)), 
+      hsl(var(--success))
+    );
+    background-size: 200% 200%;
+    animation: verificationGlow 3s ease-in-out infinite;
+    z-index: -1;
+    filter: blur(8px);
+    opacity: 0.6;
   }
 
-  /* Ripple effect for clicks */
-  .ripple {
+  @keyframes verificationGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Micro-interaction: Card hover */
+  .card-hover-premium {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover-premium:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 
+      0 20px 40px hsl(var(--background) / 0.3),
+      0 0 20px hsl(var(--bitcoin) / 0.1),
+      inset 0 1px 0 hsl(var(--foreground) / 0.1);
+  }
+
+  /* Premium ripple effect */
+  .ripple-premium {
     position: relative;
     overflow: hidden;
   }
 
-  .ripple::before {
+  .ripple-premium::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -290,24 +427,29 @@
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: rgba(247, 147, 26, 0.3);
+    background: radial-gradient(circle, 
+      hsl(var(--bitcoin) / 0.4) 0%, 
+      hsl(var(--bitcoin) / 0.1) 50%, 
+      transparent 100%
+    );
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .ripple:active::before {
-    width: 300px;
-    height: 300px;
+  .ripple-premium:active::before {
+    width: 400px;
+    height: 400px;
   }
 }
 
 @layer utilities {
   /* Theme transition utilities */
   .theme-transition {
-    transition: background-color 0.3s ease, 
-                color 0.3s ease, 
-                border-color 0.3s ease,
-                box-shadow 0.3s ease;
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Enhanced responsive utilities */
@@ -315,29 +457,37 @@
     @apply px-4 sm:px-6 lg:px-8;
   }
 
-  /* Bitcoin-themed custom utilities */
-  .text-bg-base { color: hsl(var(--bg-base)); }
-  .bg-bg-base { background-color: hsl(var(--bg-base)); }
+  /* Fixed Bitcoin-themed custom utilities */
   .text-surface { color: hsl(var(--surface)); }
   .bg-surface { background-color: hsl(var(--surface)); }
   .text-surface-alt { color: hsl(var(--surface-alt)); }
   .bg-surface-alt { background-color: hsl(var(--surface-alt)); }
   .text-text-primary { color: hsl(var(--text-primary)); }
   .text-text-secondary { color: hsl(var(--text-secondary)); }
+  .text-bitcoin { color: hsl(var(--bitcoin)); }
+  .bg-bitcoin { background-color: hsl(var(--bitcoin)); }
+  .text-success { color: hsl(var(--success)); }
+  .bg-success { background-color: hsl(var(--success)); }
+  .text-danger { color: hsl(var(--danger)); }
+  .bg-danger { background-color: hsl(var(--danger)); }
 
-  /* Mobile-specific utilities */
+  /* Premium focus states */
+  .focus-premium:focus {
+    outline: none;
+    ring: 3px;
+    ring-color: hsl(var(--bitcoin) / 0.3);
+    ring-offset: 2px;
+    ring-offset-color: hsl(var(--background));
+  }
+
+  /* Mobile optimizations */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
   }
 
-  .mobile-text-base {
-    @apply text-base;
-  }
-
-  .mobile-text-lg {
-    @apply text-lg;
-  }
+  .mobile-text-base { @apply text-base; }
+  .mobile-text-lg { @apply text-lg; }
 
   .mobile-p-safe {
     padding-bottom: env(safe-area-inset-bottom);
@@ -346,10 +496,9 @@
     padding-right: env(safe-area-inset-right);
   }
 
-  /* Mobile input enhancements */
   .mobile-input {
-    @apply text-base; /* Prevents zoom on iOS */
-    font-size: 16px !important; /* Force 16px to prevent zoom */
+    @apply text-base;
+    font-size: 16px !important;
     -webkit-appearance: none;
     border-radius: 8px;
   }
@@ -362,7 +511,6 @@
     min-height: 56px;
   }
 
-  /* Mobile button enhancements */
   .mobile-button {
     @apply touch-target;
     min-height: 48px;
@@ -377,32 +525,6 @@
     padding: 10px;
   }
 
-  /* Mobile navigation */
-  .mobile-nav {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-
-  /* Mobile modal optimizations */
-  .mobile-modal {
-    max-height: calc(100vh - 40px);
-    max-width: calc(100vw - 32px);
-    margin: 20px 16px;
-  }
-
-  .mobile-terminal {
-    max-height: calc(100vh - 80px);
-    max-width: calc(100vw - 24px);
-    margin: 40px 12px;
-    min-height: 400px;
-  }
-
-  /* Mobile card layouts */
-  .mobile-card {
-    margin: 0 -4px;
-    border-radius: 12px 12px 0 0;
-  }
-
   .mobile-grid {
     display: grid;
     gap: 12px;
@@ -415,7 +537,6 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Mobile typography scaling */
   .mobile-h1 {
     @apply text-3xl sm:text-4xl lg:text-5xl;
     line-height: 1.1;
@@ -431,7 +552,6 @@
     line-height: 1.3;
   }
 
-  /* Mobile spacing utilities */
   .mobile-spacing {
     @apply py-6 sm:py-8 lg:py-12;
   }
@@ -440,32 +560,30 @@
     @apply py-8 sm:py-12 lg:py-16;
   }
 
-  /* Mobile scroll improvements */
   .mobile-scroll {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
 
-  /* Mobile-specific animations */
   .mobile-slide-up {
-    animation: mobileSlideUp 0.3s ease-out;
+    animation: mobileSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @keyframes mobileSlideUp {
     from {
       opacity: 0;
-      transform: translateY(50px);
+      transform: translateY(50px) scale(0.95);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
 
-  /* Mobile hover states (disable on touch) */
   @media (hover: hover) {
     .mobile-hover:hover {
       transform: scale(1.02);
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
@@ -476,74 +594,91 @@
     }
   }
 
-  /* Mobile-specific responsive breakpoints */
-  .mobile-only {
-    @apply block sm:hidden;
-  }
-
-  .desktop-only {
-    @apply hidden sm:block;
-  }
-
-  .tablet-up {
-    @apply hidden md:block;
-  }
+  .mobile-only { @apply block sm:hidden; }
+  .desktop-only { @apply hidden sm:block; }
+  .tablet-up { @apply hidden md:block; }
 }
 
-/* Terminal Verifier Animations */
-@keyframes matrix-fall {
+/* TERMINAL VERIFIER PREMIUM ANIMATIONS */
+@keyframes matrix-fall-premium {
   0% {
     transform: translateY(-100px);
     opacity: 0;
+    filter: hue-rotate(0deg);
   }
   10% {
     opacity: 0.8;
+    filter: hue-rotate(90deg);
   }
   90% {
     opacity: 0.8;
+    filter: hue-rotate(270deg);
   }
   100% {
     transform: translateY(100vh);
     opacity: 0;
+    filter: hue-rotate(360deg);
   }
 }
 
-@keyframes terminal-dots {
-  0%, 20% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes terminal-dots-premium {
+  0%, 20% { 
+    opacity: 0; 
+    transform: scale(0.8);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.2);
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(0.8);
+  }
 }
 
-@keyframes terminal-glow {
-  0%, 100% { text-shadow: 0 0 5px #4ade80; }
-  50% { text-shadow: 0 0 20px #4ade80, 0 0 30px #4ade80; }
+@keyframes terminal-glow-premium {
+  0%, 100% { 
+    text-shadow: 0 0 5px hsl(var(--success));
+    filter: brightness(1);
+  }
+  50% { 
+    text-shadow: 
+      0 0 10px hsl(var(--success)),
+      0 0 20px hsl(var(--success)),
+      0 0 30px hsl(var(--success));
+    filter: brightness(1.2);
+  }
 }
 
-@keyframes terminal-flicker {
-  0%, 98% { opacity: 1; }
-  99% { opacity: 0.8; }
-  100% { opacity: 1; }
-}
-
-.matrix-rain {
-  animation: matrix-fall linear infinite;
+.matrix-rain-premium {
+  animation: matrix-fall-premium linear infinite;
   writing-mode: vertical-rl;
   text-orientation: upright;
   pointer-events: none;
+  color: hsl(var(--success));
 }
 
-.loading-dots .dot {
-  animation: terminal-dots 1.5s infinite;
+.loading-dots-premium .dot {
+  animation: terminal-dots-premium 1.8s infinite;
+  background: hsl(var(--success));
+  border-radius: 50%;
 }
 
-.loading-dots .dot:nth-child(1) { animation-delay: 0s; }
-.loading-dots .dot:nth-child(2) { animation-delay: 0.3s; }
-.loading-dots .dot:nth-child(3) { animation-delay: 0.6s; }
+.loading-dots-premium .dot:nth-child(1) { animation-delay: 0s; }
+.loading-dots-premium .dot:nth-child(2) { animation-delay: 0.4s; }
+.loading-dots-premium .dot:nth-child(3) { animation-delay: 0.8s; }
 
-.glow-text {
-  animation: terminal-glow 2s ease-in-out infinite;
+.glow-text-premium {
+  animation: terminal-glow-premium 2.5s ease-in-out infinite;
+  color: hsl(var(--success));
 }
 
-.terminal-flicker {
-  animation: terminal-flicker 0.15s infinite linear;
+.terminal-flicker-premium {
+  animation: terminalFlickerPremium 0.2s infinite linear;
+}
+
+@keyframes terminalFlickerPremium {
+  0%, 98% { opacity: 1; filter: brightness(1); }
+  99% { opacity: 0.95; filter: brightness(0.9); }
+  100% { opacity: 1; filter: brightness(1); }
 }

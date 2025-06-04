@@ -218,6 +218,7 @@ export default function BlockCheckPage() {
                           <HashFlicker 
                             hash={result.hash || ''} 
                             className="text-text-primary break-all leading-relaxed text-sm sm:text-base"
+                            copyable={true}
                           />
                         </div>
                         
@@ -292,6 +293,7 @@ export default function BlockCheckPage() {
                           <HashFlicker 
                             hash={result.hash || ''} 
                             className="text-text-primary break-all leading-relaxed text-sm sm:text-base"
+                            copyable={true}
                           />
                         </div>
                         
