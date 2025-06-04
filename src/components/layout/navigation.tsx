@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "@/components/theme/theme-toggle"
 
 const navigation = [
   { name: "Explorer", href: "/explorer" },
@@ -15,16 +16,16 @@ export default function Navigation() {
   const pathname = usePathname()
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-bg-base/95 backdrop-blur supports-[backdrop-filter]:bg-bg-base/60">
+    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 theme-transition">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center group">
               <div className="flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-lg bg-bitcoin flex items-center justify-center">
+                <div className="h-8 w-8 rounded-lg bg-bitcoin flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <span className="text-black font-bold text-lg">R</span>
                 </div>
-                <span className="font-bold text-xl text-text-primary">Raito</span>
+                <span className="font-bold text-xl text-text-primary group-hover:text-bitcoin transition-colors">Raito</span>
               </div>
             </Link>
             <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
@@ -33,7 +34,7 @@ export default function Navigation() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors",
+                    "inline-flex items-center px-1 pt-1 text-sm font-medium transition-all duration-300 hover:scale-105",
                     pathname === item.href
                       ? "text-bitcoin border-b-2 border-bitcoin"
                       : "text-text-secondary hover:text-text-primary hover:border-slate-600 border-b-2 border-transparent"
@@ -44,12 +45,13 @@ export default function Navigation() {
               ))}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-3">
+            <ThemeToggle />
             <Link
               href="https://github.com/keep-starknet-strange/raito"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-secondary hover:text-bitcoin transition-colors"
+              className="text-text-secondary hover:text-bitcoin transition-all duration-300 hover:scale-110 p-2 rounded-md hover:bg-surface-alt/50"
             >
               <span className="sr-only">GitHub</span>
               <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">

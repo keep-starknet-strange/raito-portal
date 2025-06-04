@@ -16,7 +16,9 @@ import {
     Box,
     Activity,
     TrendingUp,
-    Shield
+    Shield,
+    Sun,
+    Moon
 } from "lucide-react"
 
 export const Icons = {
@@ -38,6 +40,8 @@ export const Icons = {
   activity: Activity,
   trendingUp: TrendingUp,
   shield: Shield,
+  sun: Sun,
+  moon: Moon,
 } as const
 
 export type IconKeys = keyof typeof Icons 

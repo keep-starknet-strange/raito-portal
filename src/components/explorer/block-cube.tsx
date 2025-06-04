@@ -2,6 +2,7 @@ import Link from "next/link"
 import { MockBlock } from "@/data/mockBlocks"
 import { formatTimeAgo, formatBTC } from "@/lib/utils"
 import { Icons } from "@/components/ui/icons"
+import { HashFlicker } from "@/components/ui/hash-flicker"
 
 interface BlockCubeProps {
   block: MockBlock
@@ -45,16 +46,15 @@ export default function BlockCube({ block, index }: BlockCubeProps) {
   return (
     <Link href={`/block/${block.height}`}>
       <div className={`
-        relative min-w-[280px] h-[160px] rounded-lg border border-slate-600 
+        block-cube ripple min-w-[280px] h-[160px] rounded-lg border border-slate-600 
         ${blockColor} 
-        hover:scale-105 hover:border-bitcoin transition-all duration-300 
-        cursor-pointer group shadow-lg hover:shadow-xl
-        ${isRecent ? 'ring-2 ring-bitcoin/50 animate-pulse' : ''}
+        cursor-pointer group shadow-lg theme-transition
+        ${isRecent ? 'ring-2 ring-bitcoin/50 glow-pulse float-animation' : ''}
       `}>
         {/* Verification Badge */}
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-2 z-10">
           {block.verified ? (
-            <div className="flex items-center gap-1 bg-black/30 rounded-full px-2 py-1">
+            <div className="flex items-center gap-1 bg-black/30 rounded-full px-2 py-1 backdrop-blur-sm">
               <Icons.lock className="h-3 w-3 text-green-400" />
               <span className="text-xs text-green-400 font-medium">STARK</span>
             </div>
@@ -64,44 +64,54 @@ export default function BlockCube({ block, index }: BlockCubeProps) {
         </div>
 
         {/* Block Content */}
-        <div className="p-4 h-full flex flex-col justify-between text-white">
+        <div className="p-4 h-full flex flex-col justify-between text-white relative z-10">
           {/* Header */}
           <div>
-            <div className="text-lg font-bold text-bitcoin mb-1">
-              {block.height.toLocaleString()}
+            <div className="text-lg font-bold text-bitcoin mb-1 group-hover:text-orange-300 transition-colors">
+              <HashFlicker 
+                hash={block.height.toString()}
+                className="text-lg font-bold"
+              />
             </div>
-            <div className={`text-sm font-medium ${feeRate.color} mb-2`}>
+            <div className={`text-sm font-medium ${feeRate.color} mb-2 transition-all duration-300`}>
               {feeRate.range}
             </div>
           </div>
 
           {/* Main Info */}
           <div className="space-y-1">
-            <div className="text-xl font-bold">
+            <div className="text-xl font-bold group-hover:scale-105 transition-transform duration-300">
               {formatBTC(block.totalFees)}
             </div>
-            <div className="text-sm opacity-90">
+            <div className="text-sm opacity-90 group-hover:opacity-100 transition-opacity">
               {block.txCount.toLocaleString()} transactions
             </div>
           </div>
 
           {/* Footer */}
           <div className="flex items-center justify-between text-xs">
-            <div className="opacity-75">
+            <div className="opacity-75 group-hover:opacity-100 transition-opacity">
               {isRecent ? (
-                <span className="text-bitcoin font-medium">In ~{Math.ceil((block.timestamp + 600000 - Date.now()) / 60000)} min</span>
+                <span className="text-bitcoin font-medium animate-pulse">
+                  In ~{Math.ceil((block.timestamp + 600000 - Date.now()) / 60000)} min
+                </span>
               ) : (
-                timeAgo
+                <span className="transition-colors group-hover:text-orange-300">
+                  {timeAgo}
+                </span>
               )}
             </div>
-            <div className={`font-medium ${miningPool.color}`}>
+            <div className={`font-medium ${miningPool.color} transition-all duration-300 group-hover:scale-110`}>
               {miningPool.name}
             </div>
           </div>
         </div>
 
-        {/* Hover Glow Effect */}
-        <div className="absolute inset-0 rounded-lg bg-bitcoin/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+        {/* Enhanced Hover Effects */}
+        <div className="absolute inset-0 rounded-lg bg-bitcoin/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        
+        {/* Subtle Border Glow */}
+        <div className="absolute inset-0 rounded-lg border border-bitcoin/0 group-hover:border-bitcoin/30 transition-all duration-300 pointer-events-none" />
       </div>
     </Link>
   )
