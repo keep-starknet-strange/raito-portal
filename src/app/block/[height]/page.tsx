@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { HashFlicker } from "@/components/ui/hash-flicker"
 import VerificationSimulator from "@/components/verification/verification-simulator"
+import { TerminalVerifier } from "@/components/verification/terminal-verifier"
 
 interface BlockPageProps {
   params: Promise<{
@@ -67,9 +68,12 @@ export default async function BlockPage({ params }: BlockPageProps) {
                 <h1 className="text-5xl font-bold text-text-primary mb-3 flex items-center gap-4">
                   Block #<HashFlicker hash={block.height.toString()} className="text-bitcoin" />
                   {block.verified && (
-                    <div className="flex items-center gap-2 bg-success/20 rounded-full px-4 py-2 border border-success/30">
-                      <Icons.lock className="h-5 w-5 text-success animate-pulse" />
-                      <span className="text-success font-medium text-lg">STARK Verified</span>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 bg-success/20 rounded-full px-4 py-2 border border-success/30">
+                        <Icons.lock className="h-5 w-5 text-success animate-pulse" />
+                        <span className="text-success font-medium text-lg">STARK Verified</span>
+                      </div>
+                      <TerminalVerifier blockHeight={block.height} />
                     </div>
                   )}
                 </h1>
